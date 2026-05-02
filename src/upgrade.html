@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Upgrade FocusLedger</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="upgrade-page">
+      <header class="dashboard-header">
+        <div>
+          <p class="eyebrow">FocusLedger Pro</p>
+          <h1>Monetize better focus.</h1>
+        </div>
+        <a class="secondary link-button" href="options.html">Back</a>
+      </header>
+
+      <section class="pricing-grid">
+        <article class="price-card">
+          <h2>Free</h2>
+          <p class="price">$0</p>
+          <ul>
+            <li>3 blocked sites</li>
+            <li>60-minute focus sessions</li>
+            <li>7-day local history</li>
+          </ul>
+        </article>
+
+        <article class="price-card featured">
+          <h2>Pro</h2>
+          <p class="price">$7/mo</p>
+          <ul>
+            <li>Unlimited blocked sites</li>
+            <li>4-hour focus sessions</li>
+            <li>CSV export</li>
+            <li>Advanced schedules</li>
+          </ul>
+          <a class="primary link-button" href="https://buy.stripe.com/test_replace_me" target="_blank" rel="noreferrer">Upgrade with Stripe</a>
+        </article>
+      </section>
+
+      <form id="licenseForm" class="panel license-panel">
+        <h2>Activate license</h2>
+        <label>
+          License key
+          <input id="licenseKey" placeholder="Paste key from payment receipt">
+        </label>
+        <button class="primary" type="submit">Activate Pro</button>
+        <p id="licenseStatus" class="muted"></p>
+      </form>
+    </main>
+    <script type="module" src="upgrade.js"></script>
+  </body>
+</html>

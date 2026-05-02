@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FocusLedger</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="popup-shell">
+    <main class="popup">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">FocusLedger</p>
+          <h1 id="sessionTitle">Earn with focus</h1>
+        </div>
+        <a class="icon-link" href="options.html" title="Open dashboard" target="_blank">⚙</a>
+      </header>
+
+      <section class="metric-strip">
+        <div>
+          <span id="todayMinutes">0m</span>
+          <small>today</small>
+        </div>
+        <div>
+          <span id="todayEarned">$0</span>
+          <small>value</small>
+        </div>
+        <div>
+          <span id="todayProgress">0%</span>
+          <small>goal</small>
+        </div>
+      </section>
+
+      <section class="timer-panel">
+        <div class="timer-ring" aria-live="polite">
+          <span id="timeRemaining">25:00</span>
+        </div>
+        <form id="startForm" class="stack">
+          <label>
+            Session
+            <input id="sessionLabel" value="Deep work" maxlength="40">
+          </label>
+          <label>
+            Minutes
+            <input id="sessionMinutes" type="number" min="5" max="240" value="25">
+          </label>
+          <button id="primaryAction" class="primary" type="submit">Start focus</button>
+        </form>
+        <button id="stopAction" class="secondary hidden" type="button">Stop and save</button>
+      </section>
+
+      <section class="blocked-list">
+        <div class="section-title">
+          <h2>Blocked during focus</h2>
+          <a href="options.html#sites" target="_blank">Edit</a>
+        </div>
+        <ul id="blockedSites"></ul>
+      </section>
+
+      <a id="upgradeBanner" class="upgrade-banner hidden" href="upgrade.html" target="_blank">
+        Free plan: 3 blocked sites and 60-minute sessions. Unlock Pro.
+      </a>
+    </main>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
