@@ -1,12 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "FocusLedger",
-  "short_name": "FocusLedger",
+  "name": "FocusYield",
+  "short_name": "FocusYield",
   "description": "Turn focus sessions into measurable income goals with smart blocking, earnings estimates, and upgrade-ready Pro limits.",
   "version": "0.1.0",
   "minimum_chrome_version": "116",
   "action": {
-    "default_title": "FocusLedger",
+    "default_title": "FocusYield",
     "default_popup": "src/popup.html"
   },
   "background": {

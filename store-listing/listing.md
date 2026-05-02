@@ -1,4 +1,4 @@
-# FocusLedger Chrome Web Store Listing Draft
+# FocusYield Chrome Web Store Listing Draft
 
 ## Short Description
 
@@ -6,7 +6,7 @@ Turn focus sessions into measurable income goals with smart blocking and a freem
 
 ## Detailed Description
 
-FocusLedger helps freelancers, founders, creators, and remote workers protect deep work and see the dollar value of focused time.
+FocusYield helps freelancers, founders, creators, and remote workers protect deep work and see the dollar value of focused time.
 
 Start a focus session, block distracting sites, track daily minutes, and estimate how much value your focused work produced using your hourly rate or target earning rate.
 
@@ -24,4 +24,4 @@ Pro includes:
 - CSV export
 - Advanced schedule-ready workflow
 
-FocusLedger stores productivity data locally and does not send browsing history to a server.
+FocusYield stores productivity data locally and does not send browsing history to a server.

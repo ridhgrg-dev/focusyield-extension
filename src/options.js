@@ -89,7 +89,7 @@ ui.exportCsv.addEventListener("click", () => {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "focusledger-sessions.csv";
+  link.download = "focusyield-sessions.csv";
   link.click();
   URL.revokeObjectURL(url);
 });

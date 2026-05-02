@@ -2,11 +2,11 @@ import { getState, setState, isPro, sessionMinutes } from "./storage.js";
 
 chrome.runtime.onInstalled.addListener(async () => {
   await getState();
-  await chrome.alarms.create("focusledger-tick", { periodInMinutes: 1 });
+  await chrome.alarms.create("focusyield-tick", { periodInMinutes: 1 });
 });
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
-  if (alarm.name !== "focusledger-tick") return;
+  if (alarm.name !== "focusyield-tick") return;
   const state = await getState();
   if (state.activeSession && Date.now() >= new Date(state.activeSession.endsAt).getTime()) {
     await finishSession("completed");
@@ -85,7 +85,7 @@ async function finishSession(status) {
   await setState(nextState);
 
   if (state.settings.notifications) {
-    await chrome.notifications.create(`focusledger-${ended.id}`, {
+    await chrome.notifications.create(`focusyield-${ended.id}`, {
       type: "basic",
       iconUrl: chrome.runtime.getURL("assets/icon-128.png"),
       title: status === "completed" ? "Focus session complete" : "Focus session saved",

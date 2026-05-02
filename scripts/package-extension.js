@@ -5,8 +5,8 @@ import { join } from "node:path";
 
 const root = process.cwd();
 const dist = join(root, "dist");
-const out = join(dist, "focusledger.zip");
-const temp = join(dist, "focusledger");
+const out = join(dist, "focusyield.zip");
+const temp = join(dist, "focusyield");
 
 await rm(dist, { recursive: true, force: true });
 await mkdir(temp, { recursive: true });

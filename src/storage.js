@@ -32,18 +32,21 @@ export const DEFAULT_STATE = {
   ]
 };
 
+const STORAGE_KEY = "focusYield";
+const LEGACY_STORAGE_KEY = "focusLedger";
+
 export function isPro(state) {
   return state.plan === "pro" && state.proLicense.trim().length >= 8;
 }
 
 export async function getState() {
-  const stored = await chrome.storage.local.get("focusLedger");
-  return normalizeState({ ...DEFAULT_STATE, ...(stored.focusLedger || {}) });
+  const stored = await chrome.storage.local.get([STORAGE_KEY, LEGACY_STORAGE_KEY]);
+  return normalizeState({ ...DEFAULT_STATE, ...(stored[LEGACY_STORAGE_KEY] || {}), ...(stored[STORAGE_KEY] || {}) });
 }
 
 export async function setState(nextState) {
   const normalized = normalizeState(nextState);
-  await chrome.storage.local.set({ focusLedger: normalized });
+  await chrome.storage.local.set({ [STORAGE_KEY]: normalized });
   return normalized;
 }
 

@@ -1,6 +1,6 @@
-# FocusLedger
+# FocusYield
 
-FocusLedger is a production-minded Chrome Extension MVP that helps users turn focus time into a money metric. It includes a free tier, Pro upgrade surface, local session history, focus blocking, and packaging scripts.
+FocusYield is a production-minded Chrome Extension MVP that helps users turn focus time into a money metric. It includes a free tier, Pro upgrade surface, local session history, focus blocking, and packaging scripts.
 
 ## MVP Features
 
@@ -26,7 +26,7 @@ FocusLedger is a production-minded Chrome Extension MVP that helps users turn fo
 npm run package
 ```
 
-The extension zip will be created in `dist/focusledger.zip`.
+The extension zip will be created in `dist/focusyield.zip`.
 
 ## Monetization Path
 
@@ -48,4 +48,4 @@ This MVP is prepared for paid validation without needing a backend on day one:
 
 ## Privacy
 
-FocusLedger stores focus settings and history locally in Chrome storage. The MVP does not transmit browsing history, blocked sites, or session data to a server.
+FocusYield stores focus settings and history locally in Chrome storage. The MVP does not transmit browsing history, blocked sites, or session data to a server.
