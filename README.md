@@ -13,6 +13,15 @@ FocusYield is a production-minded Chrome Extension MVP that helps users turn foc
 - Local license activation placeholder for MVP validation.
 - Store listing draft and privacy policy starter.
 
+## Install Preview Build
+
+1. Download `focusyield.zip` from the latest GitHub Release.
+2. Unzip it on your computer.
+3. Open `chrome://extensions`.
+4. Enable Developer mode.
+5. Choose **Load unpacked**.
+6. Select the unzipped `focusyield` folder.
+
 ## Run Locally
 
 1. Open `chrome://extensions`.
@@ -32,14 +41,14 @@ The extension zip will be created in `dist/focusyield.zip`.
 
 This MVP is prepared for paid validation without needing a backend on day one:
 
-1. Replace the test Stripe link in `src/upgrade.html` with a Stripe Payment Link, Lemon Squeezy checkout, or Paddle checkout.
+1. Replace the checkout-coming-soon button in `src/upgrade.html` with a Stripe Payment Link, Lemon Squeezy checkout, or Paddle checkout.
 2. Send a license key in the payment receipt.
 3. After validation, replace local license activation with a small license API.
 4. Add Chrome Web Store screenshots and submit for review.
 
 ## Chrome Web Store Checklist
 
-- Replace the placeholder checkout URL.
+- Connect the paid checkout URL.
 - Replace the generated MVP icons with final branded PNG icons if you want a more polished store presence.
 - Update `store-listing/privacy-policy.md` with your business/contact details.
 - Create screenshots at 1280x800 or 640x400.

@@ -197,6 +197,11 @@ small,
   background: var(--green-dark);
 }
 
+.primary:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
 .secondary {
   color: var(--ink);
   border: 1px solid var(--line);

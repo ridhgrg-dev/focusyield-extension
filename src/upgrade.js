@@ -22,6 +22,6 @@ form.addEventListener("submit", async (event) => {
 function render() {
   input.value = state.proLicense || "";
   status.textContent = isPro(state)
-    ? "Pro is active on this browser. Replace the test Stripe URL before selling publicly."
-    : "Free plan is active.";
+    ? "Pro is active on this browser."
+    : "Free plan is active. Paid checkout will be connected after launch validation.";
 }
