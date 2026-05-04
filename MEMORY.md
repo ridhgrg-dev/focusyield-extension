@@ -69,6 +69,10 @@ git status -sb
 - Local rollback branch: `rollback-v0.1.3-before-stripe`.
 - Stripe work should happen on `stripe-payment-integration` until tested.
 - Do not deploy/release a new Web Store package until billing links are tested.
+- Stripe sandbox checkout does not auto-activate Pro yet; `src/upgrade.html` has a local-only sandbox unlock button for test purchases until a webhook/license API exists.
+- Billing state now tracks `billingPlan` (`free`, `monthly`, `lifetime`, or `early_access`) so the UI can show account status and keep lifetime upgrade available for monthly Pro users.
+- Upgrade page has sandbox test buttons for Activate Monthly Pro and Activate Lifetime Pro while Stripe webhooks are not connected.
+- Popup, dashboard, and upgrade page set `body[data-plan]` and show visible account status/badge changes for Pro plans.
 
 ## Next Steps
 

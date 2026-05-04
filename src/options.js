@@ -1,4 +1,4 @@
-import { FREE_LIMITS, dailyStats, getState, isPro, normalizeDomain, setState } from "./storage.js";
+import { BILLING_PLANS, FREE_LIMITS, currentBillingPlan, dailyStats, getState, isPro, normalizeDomain, planLabel, setState } from "./storage.js";
 
 let state = await getState();
 
@@ -6,6 +6,12 @@ const ui = {
   minutes: document.querySelector("#dashMinutes"),
   earned: document.querySelector("#dashEarned"),
   goal: document.querySelector("#dashGoal"),
+  planBadge: document.querySelector("#dashboardPlanBadge"),
+  upgradeLink: document.querySelector("#dashboardUpgradeLink"),
+  accountPanel: document.querySelector("#accountPanel"),
+  accountTitle: document.querySelector("#accountStatusTitle"),
+  accountCopy: document.querySelector("#accountStatusCopy"),
+  accountLimit: document.querySelector("#accountLimitCopy"),
   moneyForm: document.querySelector("#moneyForm"),
   hourlyRate: document.querySelector("#hourlyRate"),
   dailyGoal: document.querySelector("#dailyGoal"),
@@ -21,6 +27,12 @@ const ui = {
 };
 
 render();
+
+chrome.storage.onChanged.addListener(async (_changes, areaName) => {
+  if (areaName !== "local") return;
+  state = await getState();
+  render();
+});
 
 ui.moneyForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -105,6 +117,17 @@ function render() {
   ui.strictMode.checked = state.settings.strictMode;
   ui.redirectUrl.value = state.settings.redirectUrl;
 
+  const billingPlan = currentBillingPlan(state);
+  const pro = isPro(state);
+  document.body.dataset.plan = billingPlan;
+  ui.planBadge.textContent = planLabel(state);
+  ui.planBadge.dataset.plan = billingPlan;
+  ui.accountPanel.dataset.plan = billingPlan;
+  ui.upgradeLink.textContent = billingPlan === BILLING_PLANS.MONTHLY ? "Lifetime deal" : pro ? "Plan details" : "Upgrade";
+  ui.accountTitle.textContent = getAccountTitle(billingPlan);
+  ui.accountCopy.textContent = getAccountCopy(billingPlan);
+  ui.accountLimit.textContent = pro ? "Unlimited sites / 4-hour sessions / CSV export" : "3 blocked sites / 60-minute sessions";
+
   ui.siteList.innerHTML = "";
   state.blockedSites.forEach((site) => {
     const item = document.createElement("li");
@@ -131,6 +154,20 @@ function render() {
     item.textContent = "No sessions yet.";
     ui.sessionHistory.append(item);
   }
+}
+
+function getAccountTitle(billingPlan) {
+  if (billingPlan === BILLING_PLANS.MONTHLY) return "Pro Monthly active";
+  if (billingPlan === BILLING_PLANS.LIFETIME) return "Lifetime Pro active";
+  if (billingPlan === BILLING_PLANS.EARLY_ACCESS) return "Pro active";
+  return "Free plan active";
+}
+
+function getAccountCopy(billingPlan) {
+  if (billingPlan === BILLING_PLANS.MONTHLY) return "You have Pro features. Lifetime upgrade remains available.";
+  if (billingPlan === BILLING_PLANS.LIFETIME) return "You have all Pro features permanently on this browser.";
+  if (billingPlan === BILLING_PLANS.EARLY_ACCESS) return "You have Pro features from an early-access license.";
+  return "Upgrade to remove limits and export sessions.";
 }
 
 function money(value) {

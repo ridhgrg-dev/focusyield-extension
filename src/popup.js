@@ -1,7 +1,8 @@
-import { FREE_LIMITS, dailyStats, getState, isPro, sessionMinutes } from "./storage.js";
+import { BILLING_PLANS, FREE_LIMITS, currentBillingPlan, dailyStats, getState, isPro, planLabel, sessionMinutes } from "./storage.js";
 
 const elements = {
   title: document.querySelector("#sessionTitle"),
+  planBadge: document.querySelector("#popupPlanBadge"),
   todayMinutes: document.querySelector("#todayMinutes"),
   todayEarned: document.querySelector("#todayEarned"),
   todayProgress: document.querySelector("#todayProgress"),
@@ -20,6 +21,12 @@ setInterval(async () => {
   state = await getState();
   render();
 }, 1000);
+
+chrome.storage.onChanged.addListener(async (_changes, areaName) => {
+  if (areaName !== "local") return;
+  state = await getState();
+  render();
+});
 
 elements.form.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -46,7 +53,14 @@ function render() {
   elements.todayMinutes.textContent = `${stats.totalMinutes}m`;
   elements.todayEarned.textContent = money(stats.earned);
   elements.todayProgress.textContent = `${stats.progress}%`;
-  elements.upgrade.classList.toggle("hidden", pro);
+  const billingPlan = currentBillingPlan(state);
+  document.body.dataset.plan = billingPlan;
+  elements.planBadge.textContent = planLabel(state);
+  elements.planBadge.dataset.plan = billingPlan;
+  elements.upgrade.dataset.plan = billingPlan;
+  elements.upgrade.classList.remove("hidden");
+  elements.upgrade.textContent = getPlanActionText(billingPlan);
+  elements.minutes.max = pro ? "240" : "60";
 
   elements.sites.innerHTML = "";
   state.blockedSites.slice(0, pro ? 8 : FREE_LIMITS.blockedSites).forEach((site) => {
@@ -61,7 +75,7 @@ function render() {
     elements.stop.classList.remove("hidden");
     elements.timeRemaining.textContent = countdown(state.activeSession.endsAt);
   } else {
-    elements.title.textContent = "Earn with focus";
+    elements.title.textContent = getIdleTitle(billingPlan);
     elements.form.classList.remove("hidden");
     elements.stop.classList.add("hidden");
     elements.timeRemaining.textContent = `${String(elements.minutes.value).padStart(2, "0")}:00`;
@@ -69,6 +83,20 @@ function render() {
 
   const activeMinutes = state.activeSession ? sessionMinutes(state.activeSession) : 0;
   document.documentElement.style.setProperty("--ring-progress", `${Math.min(360, activeMinutes * 6)}deg`);
+}
+
+function getIdleTitle(billingPlan) {
+  if (billingPlan === BILLING_PLANS.MONTHLY) return "Pro focus mode";
+  if (billingPlan === BILLING_PLANS.LIFETIME) return "Lifetime focus mode";
+  if (billingPlan === BILLING_PLANS.EARLY_ACCESS) return "Pro focus mode";
+  return "Earn with focus";
+}
+
+function getPlanActionText(billingPlan) {
+  if (billingPlan === BILLING_PLANS.MONTHLY) return "Pro Monthly active. Lifetime deal is available.";
+  if (billingPlan === BILLING_PLANS.LIFETIME) return "Lifetime Pro active.";
+  if (billingPlan === BILLING_PLANS.EARLY_ACCESS) return "Pro active. Lifetime deal is available.";
+  return "Free plan: 3 blocked sites and 60-minute sessions. Unlock Pro.";
 }
 
 function countdown(endsAt) {

@@ -1,6 +1,6 @@
 {
   "name": "focusyield-extension",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
   "description": "Chrome Extension MVP for focus tracking, productivity blocking, and freemium monetization.",
   "type": "module",

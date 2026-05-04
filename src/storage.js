@@ -5,10 +5,19 @@ export const FREE_LIMITS = {
   historyDays: 7
 };
 
+export const BILLING_PLANS = {
+  FREE: "free",
+  MONTHLY: "monthly",
+  LIFETIME: "lifetime",
+  EARLY_ACCESS: "early_access"
+};
+
 export const DEFAULT_STATE = {
   onboardingComplete: false,
   plan: "free",
+  billingPlan: BILLING_PLANS.FREE,
   proLicense: "",
+  pendingCheckoutPlan: "",
   hourlyRate: 50,
   dailyGoalMinutes: 90,
   blockedSites: ["twitter.com", "x.com", "youtube.com"],
@@ -36,7 +45,24 @@ const STORAGE_KEY = "focusYield";
 const LEGACY_STORAGE_KEY = "focusLedger";
 
 export function isPro(state) {
-  return state.plan === "pro" && state.proLicense.trim().length >= 8;
+  return state.plan === "pro" && String(state.proLicense || "").trim().length >= 8;
+}
+
+export function currentBillingPlan(state) {
+  return isPro(state) ? normalizeBillingPlan(state) : BILLING_PLANS.FREE;
+}
+
+export function planLabel(state) {
+  switch (currentBillingPlan(state)) {
+    case BILLING_PLANS.MONTHLY:
+      return "Pro Monthly";
+    case BILLING_PLANS.LIFETIME:
+      return "Lifetime Pro";
+    case BILLING_PLANS.EARLY_ACCESS:
+      return "Pro";
+    default:
+      return "Free";
+  }
 }
 
 export async function getState() {
@@ -94,10 +120,13 @@ export function dailyStats(state, dateKey = todayKey()) {
 function normalizeState(state) {
   const blockedSites = Array.from(new Set((state.blockedSites || []).map(normalizeDomain).filter(Boolean)));
   const allowList = Array.from(new Set((state.allowList || []).map(normalizeDomain).filter(Boolean)));
+  const billingPlan = normalizeBillingPlan(state);
 
   return {
     ...DEFAULT_STATE,
     ...state,
+    billingPlan,
+    pendingCheckoutPlan: normalizePendingPlan(state.pendingCheckoutPlan),
     hourlyRate: clampNumber(state.hourlyRate, 0, 10000, DEFAULT_STATE.hourlyRate),
     dailyGoalMinutes: clampNumber(state.dailyGoalMinutes, 15, 1440, DEFAULT_STATE.dailyGoalMinutes),
     blockedSites,
@@ -109,6 +138,22 @@ function normalizeState(state) {
       ...(state.settings || {})
     }
   };
+}
+
+function normalizeBillingPlan(state) {
+  if (!isPro(state)) return BILLING_PLANS.FREE;
+  if (state.billingPlan === BILLING_PLANS.MONTHLY || state.billingPlan === BILLING_PLANS.LIFETIME) {
+    return state.billingPlan;
+  }
+
+  const license = String(state.proLicense || "").toUpperCase();
+  if (license.includes("LIFETIME")) return BILLING_PLANS.LIFETIME;
+  if (license.includes("MONTHLY") || license === "FOCUSYIELD-SANDBOX-PRO") return BILLING_PLANS.MONTHLY;
+  return BILLING_PLANS.EARLY_ACCESS;
+}
+
+function normalizePendingPlan(value) {
+  return value === BILLING_PLANS.MONTHLY || value === BILLING_PLANS.LIFETIME ? value : "";
 }
 
 function clampNumber(value, min, max, fallback) {

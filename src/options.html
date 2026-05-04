@@ -8,12 +8,16 @@
   </head>
   <body>
     <main class="dashboard">
+      <p class="build-tag">Stripe test build v0.1.4</p>
       <header class="dashboard-header">
         <div>
           <p class="eyebrow">FocusYield</p>
           <h1>Focus revenue dashboard</h1>
         </div>
-        <a class="primary link-button" href="upgrade.html">Upgrade</a>
+        <div class="header-actions">
+          <span id="dashboardPlanBadge" class="plan-badge">Free</span>
+          <a id="dashboardUpgradeLink" class="primary link-button" href="upgrade.html">Upgrade</a>
+        </div>
       </header>
 
       <section class="stats-grid">
@@ -29,6 +33,15 @@
           <span id="dashGoal">0%</span>
           <small>Goal progress</small>
         </article>
+      </section>
+
+      <section id="accountPanel" class="account-panel">
+        <div>
+          <p class="eyebrow">Account</p>
+          <h2 id="accountStatusTitle">Free plan active</h2>
+          <p id="accountStatusCopy" class="muted">Upgrade to remove limits and export sessions.</p>
+        </div>
+        <p id="accountLimitCopy" class="account-limit">3 blocked sites / 60-minute sessions</p>
       </section>
 
       <section class="settings-grid">

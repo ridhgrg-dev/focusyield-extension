@@ -3,7 +3,7 @@
   "name": "FocusYield",
   "short_name": "FocusYield",
   "description": "Turn focus sessions into measurable income goals with smart blocking, earnings estimates, and upgrade-ready Pro limits.",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "minimum_chrome_version": "116",
   "action": {
     "default_title": "FocusYield",
