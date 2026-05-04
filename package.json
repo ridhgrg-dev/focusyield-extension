@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "package": "node scripts/package-extension.js",
-    "check": "node scripts/check-extension.js"
+    "check": "node scripts/check-extension.js && node scripts/check-billing.js"
   },
   "keywords": [
     "chrome-extension",

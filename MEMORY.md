@@ -63,6 +63,13 @@ npm run package
 git status -sb
 ```
 
+## Stripe Checkpoint
+
+- Local rollback tag: `checkpoint-v0.1.3-before-stripe`.
+- Local rollback branch: `rollback-v0.1.3-before-stripe`.
+- Stripe work should happen on `stripe-payment-integration` until tested.
+- Do not deploy/release a new Web Store package until billing links are tested.
+
 ## Next Steps
 
 - Finish Chrome Web Store submission.
