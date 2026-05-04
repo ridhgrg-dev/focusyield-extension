@@ -12,10 +12,11 @@ Use this file as the project handoff note for future Codex sessions.
 ## Current Status
 
 - GitHub repo: https://github.com/ridhgrg-dev/focusyield-extension
-- Public preview release: https://github.com/ridhgrg-dev/focusyield-extension/releases/tag/v0.1.1
-- Current extension version in `manifest.json`: 0.1.1.
+- Public preview release: https://github.com/ridhgrg-dev/focusyield-extension/releases/tag/v0.1.2
+- Current extension version in `manifest.json`: 0.1.2.
 - Current Chrome Web Store upload zip: `dist/focusyield.zip`.
 - Broad host permission was removed in v0.1.1 to avoid delayed review from `<all_urls>`.
+- Extension icons were regenerated in v0.1.2 so the tab/favicon icon is centered and no longer appears as a tiny mark in a white square.
 
 ## MVP Behavior
 
