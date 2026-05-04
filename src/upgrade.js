@@ -1,19 +1,32 @@
 import { getState, isPro, setState } from "./storage.js";
-import { STRIPE_LIFETIME_PAYMENT_LINK, STRIPE_MONTHLY_PAYMENT_LINK, hasPaymentLink } from "./billing.js";
+import {
+  STRIPE_LIFETIME_PAYMENT_LINK,
+  STRIPE_MONTHLY_PAYMENT_LINK,
+  STRIPE_TEST_LICENSE_KEY,
+  hasPaymentLink,
+  isStripeSandbox
+} from "./billing.js";
 
 const form = document.querySelector("#licenseForm");
 const input = document.querySelector("#licenseKey");
 const status = document.querySelector("#licenseStatus");
 const monthlyCheckout = document.querySelector("#monthlyCheckout");
 const lifetimeCheckout = document.querySelector("#lifetimeCheckout");
+const sandboxPanel = document.querySelector("#sandboxPanel");
+const sandboxActivate = document.querySelector("#sandboxActivate");
 let state = await getState();
 
 setupCheckout(monthlyCheckout, STRIPE_MONTHLY_PAYMENT_LINK, "Upgrade monthly");
 setupCheckout(lifetimeCheckout, STRIPE_LIFETIME_PAYMENT_LINK, "Get lifetime deal");
+setupSandboxPanel();
 render();
 
 monthlyCheckout.addEventListener("click", handleMissingCheckout);
 lifetimeCheckout.addEventListener("click", handleMissingCheckout);
+sandboxActivate.addEventListener("click", async () => {
+  state = await setState({ ...state, plan: "pro", proLicense: STRIPE_TEST_LICENSE_KEY });
+  render();
+});
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -45,6 +58,10 @@ function setupCheckout(element, url, label) {
   element.textContent = label;
   element.classList.remove("disabled");
   element.removeAttribute("aria-disabled");
+}
+
+function setupSandboxPanel() {
+  sandboxPanel.classList.toggle("hidden", !isStripeSandbox());
 }
 
 function handleMissingCheckout(event) {
