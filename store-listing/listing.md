@@ -24,4 +24,9 @@ Pro includes:
 - CSV export
 - Advanced schedule-ready workflow
 
+Launch pricing:
+
+- Pro Monthly: $3/month
+- Lifetime: $29 one-time
+
 FocusYield stores productivity data locally and does not send browsing history to a server.

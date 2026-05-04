@@ -202,6 +202,12 @@ small,
   opacity: 0.72;
 }
 
+.primary.disabled,
+.primary[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
 .secondary {
   color: var(--ink);
   border: 1px solid var(--line);
@@ -278,12 +284,16 @@ small,
 }
 
 .pricing-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .price-card.featured {
   border-color: var(--green);
   box-shadow: 0 18px 44px rgba(16, 24, 32, 0.08);
+}
+
+.price-card.lifetime {
+  border-color: var(--gold);
 }
 
 .price-card li {

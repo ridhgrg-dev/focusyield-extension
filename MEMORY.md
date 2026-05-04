@@ -12,11 +12,12 @@ Use this file as the project handoff note for future Codex sessions.
 ## Current Status
 
 - GitHub repo: https://github.com/ridhgrg-dev/focusyield-extension
-- Public preview release: https://github.com/ridhgrg-dev/focusyield-extension/releases/tag/v0.1.2
-- Current extension version in `manifest.json`: 0.1.2.
+- Public preview release: https://github.com/ridhgrg-dev/focusyield-extension/releases/tag/v0.1.3
+- Current extension version in `manifest.json`: 0.1.3.
 - Current Chrome Web Store upload zip: `dist/focusyield.zip`.
 - Broad host permission was removed in v0.1.1 to avoid delayed review from `<all_urls>`.
 - Extension icons were regenerated in v0.1.2 so the tab/favicon icon is centered and no longer appears as a tiny mark in a white square.
+- Extension icons were regenerated again in v0.1.3 with transparent corners to remove white corners in Chrome tabs.
 
 ## MVP Behavior
 
@@ -24,7 +25,9 @@ Use this file as the project handoff note for future Codex sessions.
 - Free limits:
   - 3 blocked sites.
   - 60-minute maximum focus sessions.
-- Pro surface exists, but paid checkout is intentionally not connected yet.
+- Pro surface is wired for Stripe Payment Links through `src/billing.js`.
+- Pricing: Pro Monthly is $3/month; Lifetime launch deal is $29 one-time.
+- `STRIPE_MONTHLY_PAYMENT_LINK` and `STRIPE_LIFETIME_PAYMENT_LINK` must be set to live Stripe Payment Links before paid checkout is active.
 - Pro activation currently uses a local early-access license key.
 - Pro unlocks:
   - Longer sessions up to 240 minutes.
@@ -63,7 +66,6 @@ git status -sb
 ## Next Steps
 
 - Finish Chrome Web Store submission.
-- After Chrome approval, connect Stripe, Lemon Squeezy, or Paddle checkout.
-- Replace the disabled checkout button in `src/upgrade.html`.
+- Create Stripe Payment Links for monthly and lifetime plans and paste them into `src/billing.js`.
 - Replace local license activation with a small license API after paid validation.
 - Consider adding real app screenshots from the installed extension after first store approval.
