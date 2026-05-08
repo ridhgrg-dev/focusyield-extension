@@ -10,7 +10,7 @@ Focus Yield is a production-minded Chrome Extension MVP that helps users turn fo
 - Daily goal and estimated earnings dashboard.
 - Free tier limits: 5 blocked sites and 60-minute sessions.
 - Pro tier surface: $3/month and $29 lifetime launch pricing, unlimited sites, longer sessions, CSV export, advanced schedules.
-- License activation and local Pro test controls are feature-flagged and disabled by default.
+- Stripe purchase links are feature-flagged off by default; key activation is available without showing saved keys in the input.
 - Store listing draft and privacy policy starter.
 
 ## Install Preview Build
@@ -44,7 +44,7 @@ This MVP is prepared for paid validation without needing a backend on day one:
 1. Create a Stripe Payment Link for `Focus Yield Pro Monthly` at `$3/month`.
 2. Create a Stripe Payment Link for `Focus Yield Lifetime` at `$29 one-time`.
 3. Paste the live checkout URLs into `STRIPE_MONTHLY_PAYMENT_LINK` and `STRIPE_LIFETIME_PAYMENT_LINK` in `src/billing.js`.
-4. Keep local Pro conversion controls disabled unless testing with `src/feature-flags.js`.
+4. Keep Stripe purchase links disabled unless ready to sell by toggling `enableStripeCheckoutLinks` in `src/feature-flags.js`.
 5. Add a webhook-backed license API before public paid activation.
 6. Add Chrome Web Store screenshots and submit for review.
 

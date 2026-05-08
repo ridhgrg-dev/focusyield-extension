@@ -148,13 +148,12 @@ a {
   background: var(--green-dark);
 }
 
-.build-tag {
-  width: fit-content;
-  padding: 4px 8px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: var(--muted);
-  background: #fff;
+fff;
+  font-size: 11px;
+  font-weight: 850;
+}
+
+#fff;
   font-size: 11px;
   font-weight: 850;
 }

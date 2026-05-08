@@ -41,8 +41,8 @@ FOCUS-PRO-2026
 3. Run `npm run package`.
 4. Load the unpacked extension in Chrome.
 5. Open the upgrade page.
-6. Confirm the monthly button says `Upgrade monthly`.
-7. Confirm the lifetime button says `Get lifetime deal`.
+6. Confirm the monthly purchase button is disabled while `enableStripeCheckoutLinks` is `false`.
+7. Confirm the lifetime purchase button is disabled while `enableStripeCheckoutLinks` is `false`.
 8. Click each button and confirm it opens the correct Stripe checkout page.
 9. Return to the extension and activate Pro with a test license key.
 

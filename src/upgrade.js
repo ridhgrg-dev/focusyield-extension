@@ -71,10 +71,11 @@ form.addEventListener("submit", async (event) => {
   state = await setState({
     ...state,
     plan: "pro",
-    billingPlan: state.pendingCheckoutPlan || inferBillingPlanFromKey(key),
+    billingPlan: inferBillingPlanFromKey(key),
     pendingCheckoutPlan: "",
     proLicense: key
   });
+  input.value = "";
   render();
 });
 
@@ -91,6 +92,7 @@ async function activateTestPlan(billingPlan) {
     pendingCheckoutPlan: "",
     proLicense: createLocalActivationKey(billingPlan)
   });
+  input.value = "";
   render();
 }
 
@@ -99,18 +101,17 @@ function render() {
   const billingPlan = currentBillingPlan(state);
   const monthlyActive = billingPlan === BILLING_PLANS.MONTHLY;
   const lifetimeActive = billingPlan === BILLING_PLANS.LIFETIME;
-  const hasCheckout = hasPaymentLink(STRIPE_MONTHLY_PAYMENT_LINK) || hasPaymentLink(STRIPE_LIFETIME_PAYMENT_LINK);
+  const checkoutLinksConfigured = hasPaymentLink(STRIPE_MONTHLY_PAYMENT_LINK) || hasPaymentLink(STRIPE_LIFETIME_PAYMENT_LINK);
+  const checkoutEnabled = FEATURE_FLAGS.enableStripeCheckoutLinks;
   const showLocalTestControls = FEATURE_FLAGS.enableLocalProActivationButtons && isStripeSandbox();
-  const canUseLicenseForm = FEATURE_FLAGS.enableManualLicenseActivation && !pro;
+  const canUseLicenseForm = FEATURE_FLAGS.enableManualLicenseActivation;
 
   document.body.dataset.plan = billingPlan;
-  input.value = state.proLicense || "";
+  input.value = "";
   input.disabled = !canUseLicenseForm;
-  input.placeholder = FEATURE_FLAGS.enableManualLicenseActivation
-    ? "Paste a private license key"
-    : "License verification coming soon";
+  input.placeholder = canUseLicenseForm ? "Enter activation key" : "License verification coming soon";
   licenseSubmit.disabled = !canUseLicenseForm;
-  licenseSubmit.textContent = FEATURE_FLAGS.enableManualLicenseActivation ? "Activate Pro" : "Activation disabled";
+  licenseSubmit.textContent = canUseLicenseForm ? "Activate Pro" : "Activation disabled";
   planBadge.textContent = planLabel(state);
   planBadge.dataset.plan = billingPlan;
 
@@ -119,15 +120,15 @@ function render() {
   cards.lifetime.classList.toggle("current", lifetimeActive);
 
   configureCheckout(monthlyCheckout, STRIPE_MONTHLY_PAYMENT_LINK, {
-    enabled: !pro,
+    enabled: checkoutEnabled && !pro,
     enabledLabel: "Upgrade monthly",
-    disabledLabel: monthlyActive ? "Current plan" : lifetimeActive ? "Included in Lifetime" : "Unavailable"
+    disabledLabel: monthlyActive ? "Current plan" : lifetimeActive ? "Included in Lifetime" : "Monthly purchase paused"
   });
 
   configureCheckout(lifetimeCheckout, STRIPE_LIFETIME_PAYMENT_LINK, {
-    enabled: !lifetimeActive,
+    enabled: checkoutEnabled && !lifetimeActive,
     enabledLabel: monthlyActive ? "Upgrade to lifetime" : "Get lifetime deal",
-    disabledLabel: "Current plan"
+    disabledLabel: lifetimeActive ? "Current plan" : "Lifetime purchase paused"
   });
 
   sandboxPanel.classList.toggle("hidden", !showLocalTestControls);
@@ -139,8 +140,10 @@ function render() {
     pro,
     monthlyActive,
     lifetimeActive,
-    hasCheckout,
-    showLocalTestControls
+    checkoutLinksConfigured,
+    checkoutEnabled,
+    showLocalTestControls,
+    canUseLicenseForm
   });
 }
 
@@ -164,9 +167,9 @@ function configureCheckout(element, url, options) {
 
 function handleCheckout(event, billingPlan, url) {
   const link = event.currentTarget;
-  if (!hasPaymentLink(url) || link.getAttribute("aria-disabled") === "true") {
+  if (!FEATURE_FLAGS.enableStripeCheckoutLinks || !hasPaymentLink(url) || link.getAttribute("aria-disabled") === "true") {
     event.preventDefault();
-    status.textContent = link.textContent === "Current plan" ? "That plan is already active." : "Paid checkout is not available for this plan.";
+    status.textContent = link.textContent === "Current plan" ? "That plan is already active." : "Purchases are paused for now. Enter an activation key if you have one.";
     return;
   }
 
@@ -187,11 +190,12 @@ function createLocalActivationKey(billingPlan) {
   return `local-test-${billingPlan}-${suffix}`;
 }
 
-function getStatusText({ pro, monthlyActive, lifetimeActive, hasCheckout, showLocalTestControls }) {
-  if (pro && monthlyActive) return "Pro Monthly is active. Monthly checkout is disabled and Lifetime upgrade is available.";
-  if (pro && lifetimeActive) return "Lifetime Pro is active. Both paid checkout buttons are disabled.";
-  if (pro) return "Pro is active. Lifetime upgrade is available.";
-  if (hasCheckout && showLocalTestControls) return "Free plan is active. Use Stripe checkout or the local test controls above.";
-  if (hasCheckout) return "Free plan is active. Stripe checkout is connected; Pro unlock waits for backend license verification.";
+function getStatusText({ pro, monthlyActive, lifetimeActive, checkoutLinksConfigured, checkoutEnabled, showLocalTestControls, canUseLicenseForm }) {
+  if (pro && monthlyActive) return "Pro Monthly is active. Monthly purchase is paused and Lifetime activation can be entered by key.";
+  if (pro && lifetimeActive) return "Lifetime Pro is active. Both paid purchase buttons are disabled.";
+  if (pro) return "Pro is active. Enter a Lifetime key here if you upgrade later.";
+  if (showLocalTestControls) return "Free plan is active. Use local test controls or enter an activation key.";
+  if (canUseLicenseForm && checkoutLinksConfigured && !checkoutEnabled) return "Purchases are paused for now. Enter an activation key to unlock Pro.";
+  if (canUseLicenseForm) return "Enter an activation key to unlock Pro.";
   return "Free plan is active. Paid checkout is coming soon.";
 }

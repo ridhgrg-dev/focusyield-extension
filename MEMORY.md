@@ -13,7 +13,7 @@ Use this file as the project handoff note for future Codex sessions.
 
 - GitHub repo: https://github.com/ridhgrg-dev/focusyield-extension
 - Public preview release: https://github.com/ridhgrg-dev/focusyield-extension/releases/tag/v0.1.3
-- Current extension version in `manifest.json`: 0.1.5.
+- Current extension version in `manifest.json`: 0.1.6.
 - Current Chrome Web Store upload zip: `dist/focusyield.zip`.
 - Broad host permission was removed in v0.1.1 to avoid delayed review from `<all_urls>`.
 - Extension icons were regenerated in v0.1.2 so the tab/favicon icon is centered and no longer appears as a tiny mark in a white square.
@@ -27,7 +27,8 @@ Use this file as the project handoff note for future Codex sessions.
   - 60-minute maximum focus sessions.
 - Pro surface is wired for Stripe Payment Links through `src/billing.js`.
 - Pricing: Pro Monthly is $3/month; Lifetime launch deal is $29 one-time.
-- `STRIPE_MONTHLY_PAYMENT_LINK` and `STRIPE_LIFETIME_PAYMENT_LINK` must be set to live Stripe Payment Links before paid checkout is active.
+- Stripe purchase links are blocked by default with `enableStripeCheckoutLinks: false` in `src/feature-flags.js`. Turn that on only when ready to sell.
+- Manual key activation is enabled by default and should not pre-fill or reveal saved keys in the input field.
 - Pro activation currently uses a local early-access license key.
 - Pro unlocks:
   - Longer sessions up to 240 minutes.
@@ -71,7 +72,7 @@ git status -sb
 - Do not deploy/release a new Web Store package until billing links are tested.
 - Stripe sandbox checkout does not auto-activate Pro yet; paid activation needs a webhook/license API.
 - Billing state now tracks `billingPlan` (`free`, `monthly`, `lifetime`, or `early_access`) so the UI can show account status and keep lifetime upgrade available for monthly Pro users.
-- Local Pro conversion controls are gated by `src/feature-flags.js`; `enableLocalProActivationButtons` and `enableManualLicenseActivation` are disabled by default.
+- Local Pro conversion controls are gated by `src/feature-flags.js`; `enableStripeCheckoutLinks` and `enableLocalProActivationButtons` are disabled by default; `enableManualLicenseActivation` is enabled by default.
 - Do not use hardcoded activation keys. Local test activation generates a temporary browser-local key when the feature flag is enabled.
 - Popup, dashboard, and upgrade page set `body[data-plan]` and show visible account status/badge changes for Pro plans.
 
