@@ -4,6 +4,3 @@ export function hasPaymentLink(url) {
   return url.startsWith("https://");
 }
 
-export function isStripeSandbox() {
-  return [STRIPE_MONTHLY_PAYMENT_LINK, STRIPE_LIFETIME_PAYMENT_LINK].some((url) => url.includes("buy.stripe.com/test_"));
-}

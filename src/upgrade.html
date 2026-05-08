@@ -59,17 +59,9 @@
 
       <form id="licenseForm" class="panel license-panel">
         <h2>Activate license</h2>
-        <div id="sandboxPanel" class="sandbox-callout hidden">
-          <p class="muted">Stripe test checkout does not auto-unlock until the webhook server is connected. Use these local test buttons to verify each paid state.</p>
-          <div class="test-actions">
-            <button id="activateMonthlyTest" class="secondary" type="button">Activate Monthly Pro</button>
-            <button id="activateLifetimeTest" class="secondary" type="button">Activate Lifetime Pro</button>
-          </div>
-          <button id="sandboxActivate" class="secondary" type="button">I completed checkout - unlock Pro</button>
-        </div>
         <label>
           License key
-          <input id="licenseKey" placeholder="Paste a private early-access key">
+          <input id="licenseKey" placeholder="Enter monthly or lifetime activation key">
         </label>
         <button id="licenseSubmit" class="primary" type="submit">Activate Pro</button>
         <p id="licenseStatus" class="muted"></p>

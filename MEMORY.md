@@ -13,7 +13,7 @@ Use this file as the project handoff note for future Codex sessions.
 
 - GitHub repo: https://github.com/ridhgrg-dev/focusyield-extension
 - Public preview release: https://github.com/ridhgrg-dev/focusyield-extension/releases/tag/v0.1.3
-- Current extension version in `manifest.json`: 0.1.6.
+- Current extension version in `manifest.json`: 0.1.7.
 - Current Chrome Web Store upload zip: `dist/focusyield.zip`.
 - Broad host permission was removed in v0.1.1 to avoid delayed review from `<all_urls>`.
 - Extension icons were regenerated in v0.1.2 so the tab/favicon icon is centered and no longer appears as a tiny mark in a white square.
@@ -72,8 +72,8 @@ git status -sb
 - Do not deploy/release a new Web Store package until billing links are tested.
 - Stripe sandbox checkout does not auto-activate Pro yet; paid activation needs a webhook/license API.
 - Billing state now tracks `billingPlan` (`free`, `monthly`, `lifetime`, or `early_access`) so the UI can show account status and keep lifetime upgrade available for monthly Pro users.
-- Local Pro conversion controls are gated by `src/feature-flags.js`; `enableStripeCheckoutLinks` and `enableLocalProActivationButtons` are disabled by default; `enableManualLicenseActivation` is enabled by default.
-- Do not use hardcoded activation keys. Local test activation generates a temporary browser-local key when the feature flag is enabled.
+- Purchase links are gated by `src/feature-flags.js`; `enableStripeCheckoutLinks` is disabled by default, while `enableManualLicenseActivation` is enabled by default.
+- Activation keys must include `monthly` or `lifetime` to choose the correct Pro plan.
 - Popup, dashboard, and upgrade page set `body[data-plan]` and show visible account status/badge changes for Pro plans.
 
 ## Next Steps
