@@ -148,16 +148,6 @@ a {
   background: var(--green-dark);
 }
 
-fff;
-  font-size: 11px;
-  font-weight: 850;
-}
-
-#fff;
-  font-size: 11px;
-  font-weight: 850;
-}
-
 .eyebrow {
   color: var(--green);
   font-size: 12px;
@@ -402,7 +392,9 @@ input:disabled {
 
 .price-card.current::before {
   content: "Current";
-  justify-self: start;
+  position: absolute;
+  top: 16px;
+  right: 16px;
   width: fit-content;
   padding: 3px 8px;
   border-radius: 999px;
@@ -411,6 +403,7 @@ input:disabled {
   font-size: 11px;
   font-weight: 850;
   text-transform: uppercase;
+  z-index: 1;
 }
 
 .price-card.lifetime {

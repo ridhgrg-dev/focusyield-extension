@@ -47,13 +47,13 @@ form.addEventListener("submit", async (event) => {
 
   const key = input.value.trim();
   if (key.length < 8) {
-    status.textContent = "Enter a valid activation key.";
+    status.textContent = "Enter a valid activation code.";
     return;
   }
 
   const billingPlan = inferBillingPlanFromKey(key);
   if (!billingPlan) {
-    status.textContent = "Use a monthly or lifetime activation key.";
+    status.textContent = "Unable to detect a valid plan from that activation code.";
     return;
   }
 
@@ -80,7 +80,7 @@ function render() {
   document.body.dataset.plan = billingPlan;
   input.value = "";
   input.disabled = !canUseLicenseForm;
-  input.placeholder = canUseLicenseForm ? "Enter monthly or lifetime activation key" : "License verification coming soon";
+  input.placeholder = canUseLicenseForm ? "Enter your activation code" : "License verification coming soon";
   licenseSubmit.disabled = !canUseLicenseForm;
   licenseSubmit.textContent = canUseLicenseForm ? "Activate Pro" : "Activation disabled";
   planBadge.textContent = planLabel(state);
@@ -143,10 +143,19 @@ function handleCheckout(event, billingPlan, url) {
   render();
 }
 
+const LICENSE_PLAN_MARKERS = {
+  monthly: ["q7m"],
+  lifetime: ["z2l"]
+};
+
 function inferBillingPlanFromKey(key) {
-  const normalized = key.toLowerCase();
-  if (normalized.includes("lifetime")) return BILLING_PLANS.LIFETIME;
-  if (normalized.includes("monthly")) return BILLING_PLANS.MONTHLY;
+  const normalized = key.toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (LICENSE_PLAN_MARKERS.lifetime.some((marker) => normalized.includes(marker))) {
+    return BILLING_PLANS.LIFETIME;
+  }
+  if (LICENSE_PLAN_MARKERS.monthly.some((marker) => normalized.includes(marker))) {
+    return BILLING_PLANS.MONTHLY;
+  }
   return null;
 }
 

@@ -26,12 +26,12 @@ Leave the values blank while checkout is not ready. The extension will keep show
 
 ## MVP License Flow
 
-Until a license backend exists, send each paid user a license key manually after purchase. Any key with 8 or more characters activates Pro locally in the current MVP.
+Until a license backend exists, send each paid user a license key manually after purchase. Any key with 8 or more characters and a hidden plan marker activates Pro locally in the current MVP.
 
 Example early key:
 
 ```text
-FOCUS-PRO-2026
+A8Q7M-3Y5P
 ```
 
 ## Test Checklist

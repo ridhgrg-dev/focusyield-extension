@@ -73,7 +73,7 @@ git status -sb
 - Stripe sandbox checkout does not auto-activate Pro yet; paid activation needs a webhook/license API.
 - Billing state now tracks `billingPlan` (`free`, `monthly`, `lifetime`, or `early_access`) so the UI can show account status and keep lifetime upgrade available for monthly Pro users.
 - Purchase links are gated by `src/feature-flags.js`; `enableStripeCheckoutLinks` is disabled by default, while `enableManualLicenseActivation` is enabled by default.
-- Activation keys must include `monthly` or `lifetime` to choose the correct Pro plan.
+- Activation keys must include a hidden plan marker to choose the correct Pro plan.
 - Popup, dashboard, and upgrade page set `body[data-plan]` and show visible account status/badge changes for Pro plans.
 
 ## Next Steps
