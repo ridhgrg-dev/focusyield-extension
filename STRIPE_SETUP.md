@@ -1,15 +1,15 @@
 # Stripe Setup
 
-FocusYield uses Stripe Payment Links for the first paid MVP. This keeps the Chrome extension simple: no remote code, no payment card storage in the extension, and no backend required on day one.
+Focus Yield uses Stripe Payment Links for the first paid MVP. This keeps the Chrome extension simple: no remote code, no payment card storage in the extension, and no backend required on day one.
 
 ## Products
 
 Create two Stripe products:
 
-- `FocusYield Pro Monthly`
+- `Focus Yield Pro Monthly`
   - Price: `$3/month`
   - Type: recurring subscription
-- `FocusYield Lifetime`
+- `Focus Yield Lifetime`
   - Price: `$29 one-time`
   - Type: one-time payment
 

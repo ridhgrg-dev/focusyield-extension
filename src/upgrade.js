@@ -1,8 +1,8 @@
+import { FEATURE_FLAGS } from "./feature-flags.js";
 import { BILLING_PLANS, currentBillingPlan, getState, isPro, planLabel, setState } from "./storage.js";
 import {
   STRIPE_LIFETIME_PAYMENT_LINK,
   STRIPE_MONTHLY_PAYMENT_LINK,
-  STRIPE_TEST_LICENSE_KEY,
   hasPaymentLink,
   isStripeSandbox
 } from "./billing.js";
@@ -56,26 +56,40 @@ activateLifetimeTest.addEventListener("click", () => {
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
+
+  if (!FEATURE_FLAGS.enableManualLicenseActivation) {
+    status.textContent = "License activation is disabled until backend verification is connected.";
+    return;
+  }
+
   const key = input.value.trim();
   if (key.length < 8) {
     status.textContent = "Enter a valid license key.";
     return;
   }
 
-  const billingPlan = key === STRIPE_TEST_LICENSE_KEY
-    ? BILLING_PLANS.MONTHLY
-    : state.pendingCheckoutPlan || BILLING_PLANS.EARLY_ACCESS;
-  state = await setState({ ...state, plan: "pro", billingPlan, pendingCheckoutPlan: "", proLicense: key });
+  state = await setState({
+    ...state,
+    plan: "pro",
+    billingPlan: state.pendingCheckoutPlan || inferBillingPlanFromKey(key),
+    pendingCheckoutPlan: "",
+    proLicense: key
+  });
   render();
 });
 
 async function activateTestPlan(billingPlan) {
+  if (!FEATURE_FLAGS.enableLocalProActivationButtons) {
+    status.textContent = "Local Pro test activation is disabled by feature flag.";
+    return;
+  }
+
   state = await setState({
     ...state,
     plan: "pro",
     billingPlan,
     pendingCheckoutPlan: "",
-    proLicense: `${STRIPE_TEST_LICENSE_KEY}-${billingPlan.toUpperCase()}`
+    proLicense: createLocalActivationKey(billingPlan)
   });
   render();
 }
@@ -86,11 +100,17 @@ function render() {
   const monthlyActive = billingPlan === BILLING_PLANS.MONTHLY;
   const lifetimeActive = billingPlan === BILLING_PLANS.LIFETIME;
   const hasCheckout = hasPaymentLink(STRIPE_MONTHLY_PAYMENT_LINK) || hasPaymentLink(STRIPE_LIFETIME_PAYMENT_LINK);
+  const showLocalTestControls = FEATURE_FLAGS.enableLocalProActivationButtons && isStripeSandbox();
+  const canUseLicenseForm = FEATURE_FLAGS.enableManualLicenseActivation && !pro;
 
   document.body.dataset.plan = billingPlan;
   input.value = state.proLicense || "";
-  input.disabled = pro;
-  licenseSubmit.disabled = pro;
+  input.disabled = !canUseLicenseForm;
+  input.placeholder = FEATURE_FLAGS.enableManualLicenseActivation
+    ? "Paste a private license key"
+    : "License verification coming soon";
+  licenseSubmit.disabled = !canUseLicenseForm;
+  licenseSubmit.textContent = FEATURE_FLAGS.enableManualLicenseActivation ? "Activate Pro" : "Activation disabled";
   planBadge.textContent = planLabel(state);
   planBadge.dataset.plan = billingPlan;
 
@@ -110,20 +130,18 @@ function render() {
     disabledLabel: "Current plan"
   });
 
-  sandboxPanel.classList.toggle("hidden", !isStripeSandbox());
+  sandboxPanel.classList.toggle("hidden", !showLocalTestControls);
   sandboxActivate.textContent = state.pendingCheckoutPlan === BILLING_PLANS.LIFETIME
     ? "I completed checkout - unlock Lifetime Pro"
     : "I completed checkout - unlock Pro Monthly";
 
-  status.textContent = pro
-    ? monthlyActive
-      ? "Pro Monthly is active. Monthly checkout is disabled and Lifetime upgrade is available."
-      : lifetimeActive
-        ? "Lifetime Pro is active. Both paid checkout buttons are disabled."
-        : "Pro is active. Lifetime upgrade is available."
-    : hasCheckout
-      ? "Free plan is active. Use Stripe checkout or the test buttons above."
-      : "Free plan is active. Paid checkout is coming soon.";
+  status.textContent = getStatusText({
+    pro,
+    monthlyActive,
+    lifetimeActive,
+    hasCheckout,
+    showLocalTestControls
+  });
 }
 
 function configureCheckout(element, url, options) {
@@ -155,4 +173,25 @@ function handleCheckout(event, billingPlan, url) {
   state = { ...state, pendingCheckoutPlan: billingPlan };
   setState(state);
   render();
+}
+
+function inferBillingPlanFromKey(key) {
+  const normalized = key.toLowerCase();
+  if (normalized.includes("lifetime")) return BILLING_PLANS.LIFETIME;
+  if (normalized.includes("monthly")) return BILLING_PLANS.MONTHLY;
+  return BILLING_PLANS.EARLY_ACCESS;
+}
+
+function createLocalActivationKey(billingPlan) {
+  const suffix = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  return `local-test-${billingPlan}-${suffix}`;
+}
+
+function getStatusText({ pro, monthlyActive, lifetimeActive, hasCheckout, showLocalTestControls }) {
+  if (pro && monthlyActive) return "Pro Monthly is active. Monthly checkout is disabled and Lifetime upgrade is available.";
+  if (pro && lifetimeActive) return "Lifetime Pro is active. Both paid checkout buttons are disabled.";
+  if (pro) return "Pro is active. Lifetime upgrade is available.";
+  if (hasCheckout && showLocalTestControls) return "Free plan is active. Use Stripe checkout or the local test controls above.";
+  if (hasCheckout) return "Free plan is active. Stripe checkout is connected; Pro unlock waits for backend license verification.";
+  return "Free plan is active. Paid checkout is coming soon.";
 }

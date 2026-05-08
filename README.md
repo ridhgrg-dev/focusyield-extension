@@ -1,6 +1,6 @@
-# FocusYield
+# Focus Yield
 
-FocusYield is a production-minded Chrome Extension MVP that helps users turn focus time into a money metric. It includes a free tier, Pro upgrade surface, local session history, focus blocking, and packaging scripts.
+Focus Yield is a production-minded Chrome Extension MVP that helps users turn focus time into a money metric. It includes a free tier, Pro upgrade surface, local session history, focus blocking, and packaging scripts.
 
 ## MVP Features
 
@@ -8,9 +8,9 @@ FocusYield is a production-minded Chrome Extension MVP that helps users turn foc
 - Popup timer with focus sessions.
 - Distracting-site blocker while a session is active.
 - Daily goal and estimated earnings dashboard.
-- Free tier limits: 3 blocked sites and 60-minute sessions.
+- Free tier limits: 5 blocked sites and 60-minute sessions.
 - Pro tier surface: $3/month and $29 lifetime launch pricing, unlimited sites, longer sessions, CSV export, advanced schedules.
-- Local license activation placeholder for MVP validation.
+- License activation and local Pro test controls are feature-flagged and disabled by default.
 - Store listing draft and privacy policy starter.
 
 ## Install Preview Build
@@ -41,11 +41,11 @@ The extension zip will be created in `dist/focusyield.zip`.
 
 This MVP is prepared for paid validation without needing a backend on day one:
 
-1. Create a Stripe Payment Link for `FocusYield Pro Monthly` at `$3/month`.
-2. Create a Stripe Payment Link for `FocusYield Lifetime` at `$29 one-time`.
+1. Create a Stripe Payment Link for `Focus Yield Pro Monthly` at `$3/month`.
+2. Create a Stripe Payment Link for `Focus Yield Lifetime` at `$29 one-time`.
 3. Paste the live checkout URLs into `STRIPE_MONTHLY_PAYMENT_LINK` and `STRIPE_LIFETIME_PAYMENT_LINK` in `src/billing.js`.
-4. Send a license key in the payment receipt.
-5. After validation, replace local license activation with a small license API.
+4. Keep local Pro conversion controls disabled unless testing with `src/feature-flags.js`.
+5. Add a webhook-backed license API before public paid activation.
 6. Add Chrome Web Store screenshots and submit for review.
 
 ## Chrome Web Store Checklist
@@ -59,4 +59,4 @@ This MVP is prepared for paid validation without needing a backend on day one:
 
 ## Privacy
 
-FocusYield stores focus settings and history locally in Chrome storage. The MVP does not transmit browsing history, blocked sites, or session data to a server.
+Focus Yield stores focus settings and history locally in Chrome storage. The MVP does not transmit browsing history, blocked sites, or session data to a server.

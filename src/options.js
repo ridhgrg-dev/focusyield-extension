@@ -126,7 +126,7 @@ function render() {
   ui.upgradeLink.textContent = billingPlan === BILLING_PLANS.MONTHLY ? "Lifetime deal" : pro ? "Plan details" : "Upgrade";
   ui.accountTitle.textContent = getAccountTitle(billingPlan);
   ui.accountCopy.textContent = getAccountCopy(billingPlan);
-  ui.accountLimit.textContent = pro ? "Unlimited sites / 4-hour sessions / CSV export" : "3 blocked sites / 60-minute sessions";
+  ui.accountLimit.textContent = pro ? "Unlimited sites / 4-hour sessions / CSV export" : "5 blocked sites / 60-minute sessions";
 
   ui.siteList.innerHTML = "";
   state.blockedSites.forEach((site) => {

@@ -1,5 +1,5 @@
 export const FREE_LIMITS = {
-  blockedSites: 3,
+  blockedSites: 5,
   dailyGoalMinutes: 120,
   schedules: 1,
   historyDays: 7
@@ -148,7 +148,7 @@ function normalizeBillingPlan(state) {
 
   const license = String(state.proLicense || "").toUpperCase();
   if (license.includes("LIFETIME")) return BILLING_PLANS.LIFETIME;
-  if (license.includes("MONTHLY") || license === "FOCUSYIELD-SANDBOX-PRO") return BILLING_PLANS.MONTHLY;
+  if (license.includes("MONTHLY")) return BILLING_PLANS.MONTHLY;
   return BILLING_PLANS.EARLY_ACCESS;
 }
 

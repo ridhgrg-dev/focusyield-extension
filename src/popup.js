@@ -96,7 +96,7 @@ function getPlanActionText(billingPlan) {
   if (billingPlan === BILLING_PLANS.MONTHLY) return "Pro Monthly active. Lifetime deal is available.";
   if (billingPlan === BILLING_PLANS.LIFETIME) return "Lifetime Pro active.";
   if (billingPlan === BILLING_PLANS.EARLY_ACCESS) return "Pro active. Lifetime deal is available.";
-  return "Free plan: 3 blocked sites and 60-minute sessions. Unlock Pro.";
+  return "Free plan: 5 blocked sites and 60-minute sessions. Unlock Pro.";
 }
 
 function countdown(endsAt) {

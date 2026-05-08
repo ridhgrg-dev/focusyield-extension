@@ -1,10 +1,10 @@
-# FocusYield Project Memory
+# Focus Yield Project Memory
 
 Use this file as the project handoff note for future Codex sessions.
 
 ## Product
 
-- App name: FocusYield.
+- App name: Focus Yield.
 - Repo/folder name: focusyield-extension.
 - Purpose: Chrome extension that helps users run focus sessions, block distracting sites during active sessions, and track the estimated dollar value of focused work.
 - Category for Chrome Web Store: Productivity. If Chrome shows newer subcategories, use Workflow & Planning.
@@ -13,7 +13,7 @@ Use this file as the project handoff note for future Codex sessions.
 
 - GitHub repo: https://github.com/ridhgrg-dev/focusyield-extension
 - Public preview release: https://github.com/ridhgrg-dev/focusyield-extension/releases/tag/v0.1.3
-- Current extension version in `manifest.json`: 0.1.3.
+- Current extension version in `manifest.json`: 0.1.5.
 - Current Chrome Web Store upload zip: `dist/focusyield.zip`.
 - Broad host permission was removed in v0.1.1 to avoid delayed review from `<all_urls>`.
 - Extension icons were regenerated in v0.1.2 so the tab/favicon icon is centered and no longer appears as a tiny mark in a white square.
@@ -23,7 +23,7 @@ Use this file as the project handoff note for future Codex sessions.
 
 - Free plan is the default.
 - Free limits:
-  - 3 blocked sites.
+  - 5 blocked sites.
   - 60-minute maximum focus sessions.
 - Pro surface is wired for Stripe Payment Links through `src/billing.js`.
 - Pricing: Pro Monthly is $3/month; Lifetime launch deal is $29 one-time.
@@ -43,7 +43,7 @@ Use this file as the project handoff note for future Codex sessions.
   - `alarms`: Used to check when an active focus session should end and to save the completed session on schedule.
   - `notifications`: Used to show a local notification when a focus session is completed or saved.
   - `storage`: Used to store local settings, blocked-site list, focus sessions, hourly rate, daily goal, and license state in Chrome storage.
-  - `tabs`: Used to detect the active tab URL during focus sessions so FocusYield can redirect domains that match the user's local blocked-site list.
+  - `tabs`: Used to detect the active tab URL during focus sessions so Focus Yield can redirect domains that match the user's local blocked-site list.
 - Host permission justification should no longer be needed after uploading v0.1.1.
 - Privacy policy URL: https://github.com/ridhgrg-dev/focusyield-extension/blob/main/store-listing/privacy-policy.md
 
@@ -69,9 +69,10 @@ git status -sb
 - Local rollback branch: `rollback-v0.1.3-before-stripe`.
 - Stripe work should happen on `stripe-payment-integration` until tested.
 - Do not deploy/release a new Web Store package until billing links are tested.
-- Stripe sandbox checkout does not auto-activate Pro yet; `src/upgrade.html` has a local-only sandbox unlock button for test purchases until a webhook/license API exists.
+- Stripe sandbox checkout does not auto-activate Pro yet; paid activation needs a webhook/license API.
 - Billing state now tracks `billingPlan` (`free`, `monthly`, `lifetime`, or `early_access`) so the UI can show account status and keep lifetime upgrade available for monthly Pro users.
-- Upgrade page has sandbox test buttons for Activate Monthly Pro and Activate Lifetime Pro while Stripe webhooks are not connected.
+- Local Pro conversion controls are gated by `src/feature-flags.js`; `enableLocalProActivationButtons` and `enableManualLicenseActivation` are disabled by default.
+- Do not use hardcoded activation keys. Local test activation generates a temporary browser-local key when the feature flag is enabled.
 - Popup, dashboard, and upgrade page set `body[data-plan]` and show visible account status/badge changes for Pro plans.
 
 ## Next Steps
